@@ -35,24 +35,46 @@ const ShoeCard = ({
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
+          {variant === 'on-sale' && <SaleBadge>Sale</SaleBadge>}
+          {variant === 'new-release' && <NewBadge>Just released!</NewBadge>}
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price variant={variant}>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === 'on-sale' && <SalePrice>{formatPrice(salePrice)}</SalePrice>}
         </Row>
       </Wrapper>
     </Link>
   );
 };
 
+const SaleBadge = styled.span`
+  position: absolute;
+  top: 8px;
+  right: -4px;
+  color: white;
+  background-color: red;
+  padding: 8px 16px;
+`;
+
+const NewBadge = styled.span`
+  position: absolute;
+  top: 8px;
+  right: -4px;
+  color: white;
+  background-color: purple;
+  padding: 8px 16px;
+`;
+
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
+  flex: 1 1 250px;
 `;
 
 const Wrapper = styled.article``;
@@ -61,10 +83,13 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+width: 100%;`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +97,9 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+text-decoration: ${p => p.variant === 'on-sale' && 'line-through'};
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
